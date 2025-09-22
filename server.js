@@ -5,6 +5,8 @@ const port = process.env.PORT || 8080;
 const EMAIL_PATH = "/justinasbliujus_gmail_com";
 
 function gcd(a, b) {
+    a = BigInt(a);
+    b = BigInt(b);
     for (let temp = b; b !== 0;) {
         b = a % b;
         a = temp;
@@ -14,20 +16,22 @@ function gcd(a, b) {
 }
 
 function lcm(a, b) {
+    a = BigInt(a);
+    b = BigInt(b);
     const gcdValue = gcd(a, b);
     return (a * b) / gcdValue;
 }
 
 function isNaturalNumber(n) {
-  return Number.isInteger(n) && n > 0;
+  return Number.isInteger(n) && n >= 0;
 }
 app.get("/", (req, res) => {
   res.type("text/plain").send("Deployed!");
 });
 
 app.get(EMAIL_PATH, (req, res) => {
-  const x = Number(req.query.x);
-  const y = Number(req.query.y);
+  const x = BigInt(req.query.x);
+  const y = BigInt(req.query.y);
 
   if (!isNaturalNumber(x) || !isNaturalNumber(y)) {
     res.type("text/plain").send("NaN");
