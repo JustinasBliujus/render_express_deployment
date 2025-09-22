@@ -21,6 +21,9 @@ function lcm(a, b) {
 function isNaturalNumber(n) {
   return Number.isInteger(n) && n > 0;
 }
+app.get("/", (req, res) => {
+  res.type("text/plain").send("Deployed!");
+});
 
 app.get(EMAIL_PATH, (req, res) => {
   const x = Number(req.query.x);
