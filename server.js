@@ -1,49 +1,47 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 const port = process.env.PORT || 8080;
 
 const EMAIL_PATH = "/justinasbliujus_gmail_com";
 
 function gcd(a, b) {
-    a = BigInt(a);
-    b = BigInt(b);
-    for (let temp = b; b !== 0;) {
-        b = a % b;
-        a = temp;
-        temp = b;
-    }
-    return a;
+  while (b !== 0n) {
+    const temp = b;
+    b = a % b;
+    a = temp;
+  }
+  return a;
 }
 
 function lcm(a, b) {
-    a = BigInt(a);
-    b = BigInt(b);
-    const gcdValue = gcd(a, b);
-    return (a * b) / gcdValue;
+  if (a === 0n || b === 0n) return 0n;
+  return (a * b) / gcd(a, b);
 }
 
-function isNaturalNumber(n) {
-  return Number.isInteger(n) && n >= 0;
+function isNaturalNumberString(s) {
+  return typeof s === "string" && /^\d+$/.test(s);
 }
+
 app.get("/", (req, res) => {
   res.type("text/plain").send("Deployed!");
 });
 
 app.get(EMAIL_PATH, (req, res) => {
-  const x = BigInt(req.query.x);
-  const y = BigInt(req.query.y);
+  const xStr = req.query.x;
+  const yStr = req.query.y;
 
-  if (!isNaturalNumber(x) || !isNaturalNumber(y)) {
+  if (!isNaturalNumberString(xStr) || !isNaturalNumberString(yStr)) {
     res.type("text/plain").send("NaN");
     return;
   }
 
+  const x = BigInt(xStr);
+  const y = BigInt(yStr);
+
   const result = lcm(x, y);
-  res.type("text/plain").send(String(result));
+  res.type("text/plain").send(result.toString());
 });
 
-
 app.listen(port, () => {
-    console.log('started on 8080')
-})
-
+  console.log(`started on ${port}`);
+});
